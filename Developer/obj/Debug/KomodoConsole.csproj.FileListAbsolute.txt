@@ -1,0 +1,10 @@
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\bin\Debug\Developer.exe.config
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\bin\Debug\Developer.exe
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\bin\Debug\Developer.pdb
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\bin\Debug\KomodoRepository.dll
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\bin\Debug\KomodoRepository.pdb
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\obj\Debug\KomodoConsole.csprojAssemblyReference.cache
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\obj\Debug\KomodoConsole.csproj.CoreCompileInputs.cache
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\obj\Debug\KomodoConsole.csproj.CopyComplete
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\obj\Debug\Developer.exe
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\Developer\obj\Debug\Developer.pdb
