@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Komodo_Console {
-    class Program {
+   public class Program {
         static void Main(string[] args) {
             ProgramUI program = new ProgramUI();
             program.Run();

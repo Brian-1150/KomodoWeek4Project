@@ -10,6 +10,7 @@ namespace Komodo_Repository {
         yes
     }
     public class Developer {
+        public DevTeam Team { get; set; }
         public int BadgeNumber { get; set; }
         public string Name { get; set; }
         public AccessType TypeOfAccess { get; set; }

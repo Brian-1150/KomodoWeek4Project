@@ -4,3 +4,9 @@ C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_
 C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\KomodoRepository\obj\Debug\KomodoRepository.csproj.CoreCompileInputs.cache
 C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\KomodoRepository\obj\Debug\KomodoRepository.dll
 C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\KOMODO\Komodo_Individual_Project_Week4\KomodoRepository\obj\Debug\KomodoRepository.pdb
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\DeveloperTeamsKomodoProject\KomodoRepository\bin\Debug\KomodoRepository.dll
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\DeveloperTeamsKomodoProject\KomodoRepository\bin\Debug\KomodoRepository.pdb
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\DeveloperTeamsKomodoProject\KomodoRepository\obj\Debug\KomodoRepository.csprojAssemblyReference.cache
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\DeveloperTeamsKomodoProject\KomodoRepository\obj\Debug\KomodoRepository.csproj.CoreCompileInputs.cache
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\DeveloperTeamsKomodoProject\KomodoRepository\obj\Debug\KomodoRepository.dll
+C:\Users\bpcam\OneDrive\ElevenFiftyProjects\C#\DeveloperTeamsKomodoProject\KomodoRepository\obj\Debug\KomodoRepository.pdb
