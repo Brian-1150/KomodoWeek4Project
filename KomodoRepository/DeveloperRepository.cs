@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Komodo_Repository {
     public class DeveloperRepository {
+        
         public List<Developer> _listOfDevelopers = new List<Developer>();
 
         //Create
@@ -29,6 +30,7 @@ namespace Komodo_Repository {
                 previousInfo.Name = updatedInfo.Name;
                 previousInfo.BadgeNumber = updatedInfo.BadgeNumber;
                 previousInfo.TypeOfAccess = updatedInfo.TypeOfAccess;
+                previousInfo.Team = updatedInfo.Team;
                 return true;
             }
         }
@@ -37,7 +39,16 @@ namespace Komodo_Repository {
               
                 int count = _listOfDevelopers.Count;
             Developer dev = _listOfDevelopers.ElementAt(number - 1);
-            dev.Team = null;
+            if (dev.Team != null) {
+                DevTeam team = dev.Team;
+                team.TeamMembers.Remove(dev);
+                //foreach (Developer temp in team.TeamMembers) {
+                //    if (temp == dev) {
+                //        team.TeamMembers.Remove(temp);
+                //    }
+                //}
+            }
+
             _listOfDevelopers.RemoveAt(number-1);
                 if (count > _listOfDevelopers.Count) {
 

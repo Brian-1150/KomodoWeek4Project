@@ -17,11 +17,11 @@ namespace Komodo_Repository {
         public string TeamAffiliation { get; set; }
 
         public Developer() { }
-        public Developer(string name, int num, AccessType yesOrNo, string team) {
+        public Developer(string name, int num, AccessType yesOrNo, DevTeam team) {
             Name = name;
             BadgeNumber = num;
             TypeOfAccess = yesOrNo;
-            TeamAffiliation = team;
+            Team = team;
         }
         public Developer(string name, int num, AccessType yesOrNo) { 
             Name = name;

@@ -85,33 +85,33 @@ namespace Komodo_Repository {
 
             } return true;
         }
-        //Also Delete From Team
-        public bool DeleteFromTeam(int id) {
-            
-        }
 
         //Helper Methods
         public DevTeam GetTeam(string name) {
             foreach (DevTeam team in _listOfTeams) {
-                if (team.TeamName == name) {
+                if (team.TeamName.ToLower() == name) {
                     return team;
                 }
             }
             return null;
         }
+
         public void TeamDetails(string name) {
-            DevTeam details = GetTeam(name);
-            Console.WriteLine($"Team name {details.TeamName} \n" +
-                $"Team ID: {details.TeamID}\n" +
+            foreach (DevTeam team in _listOfTeams) {
+                if (team.TeamName.ToLower() == name) {
+                    Console.WriteLine($"Team name {team.TeamName} \n" +
+                $"Team ID: {team.TeamID}\n" +
                 $"List of Developers on Team: \n");
-            List<Developer> listOfDevelopers = details.TeamMembers;
-            foreach (Developer developer in listOfDevelopers) {
-                Console.WriteLine($"Name:  {developer.Name}\n");
+                    List<Developer> listOfDevelopers = team.TeamMembers;
+                    foreach (Developer developer in listOfDevelopers) {
+                        Console.WriteLine($"Name:  {developer.Name}\n");
+                    }
+
+                }
+
             }
-
-
-
         }
+
         private void ViewDevelopers() {
             Console.Clear();
             List<Developer> listOfDevelopers = _developerRepo.GetList();
