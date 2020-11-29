@@ -31,8 +31,8 @@ namespace Komodo_Repository {
             else {
                 previousInfo.TeamName = updatedInfo.TeamName;
                 previousInfo.TeamID = updatedInfo.TeamID;
-                                                    //tempList.AddRange(updatedInfo.TeamMembers); //combine 2 lists instead of replacing one with the other
-                previousInfo.TeamMembers.AddRange(updatedInfo.TeamMembers);
+                                                    //tempList.AddRange(updatedInfo.TeamMembers); 
+                previousInfo.TeamMembers.AddRange(updatedInfo.TeamMembers);  //combine 2 lists instead of replacing one with the other
                 return true;
             }
         }
@@ -67,7 +67,7 @@ namespace Komodo_Repository {
             Console.WriteLine("How many developers would you like to remove?");
             string countString = Console.ReadLine();
             int.TryParse(countString, out count);
-         if (count == 0 || count > previousInfo.TeamMembers.Count) {
+         if (count <= 0 || count > previousInfo.TeamMembers.Count) {
                 Console.WriteLine("You must enter a valid number, not greater than the current developers on the team.  Start over");
                 return false;
             }
@@ -89,12 +89,12 @@ namespace Komodo_Repository {
                         Console.WriteLine($"Enter the number of the next developer you wish to remove: ");
                         string idString = Console.ReadLine();
                         int.TryParse(idString, out id);
-                     while (id == 0 || id > previousInfo.TeamMembers.Count) {
+                     while (id <= 0 || id > previousInfo.TeamMembers.Count) {
                         Console.WriteLine("Please enter a valid index number");
                         idString = Console.ReadLine();
                         int.TryParse(idString, out id);
                     }
-                    Developer dev = previousInfo.TeamMembers.ElementAt(id - 1); 
+                    Developer dev = previousInfo.TeamMembers.ElementAt(id - 1);
                     dev.Team = null;    //removes Team from developer object
                     previousInfo.TeamMembers.RemoveAt(id-1);
                 }

@@ -15,7 +15,7 @@ namespace Komodo_Console {
             SeedWithDevsAndTeam();
             Menu();
         }
-        ///Main Menu
+        //Main Menu
         private void Menu() {
             bool exit = false; //Why do I have to assign false since default bool should be false
             do {
@@ -95,7 +95,7 @@ namespace Komodo_Console {
             int.TryParse(badgeAsString, out int k );
 
             newDeveloper.BadgeNumber = k;
-            if (k == 0) { 
+            if (k <= 0) { 
                 Console.WriteLine("Invalid entry.  Badge number has been assigned to 0. \n " +
                     "Please finish adding developer and then update badge number."); }
             string yesOrNo;
@@ -143,13 +143,18 @@ namespace Komodo_Console {
         private void ViewDevelopers() {
             Console.Clear();
             int index = 1;
-
+            string nameOfTeam = "";
             List<Developer> listOfDevelopers = _developerRepo.GetList();
             foreach (Developer developer in listOfDevelopers) {
-                Console.WriteLine(index + $".  \nName:  {developer.Name}\n" +
+                foreach (DevTeam team in _devTeamRepo.GetListOfTeams()) {
+                    if (developer.Team == team) {
+                        nameOfTeam = team.TeamName;
+                    }
+                }
+                        Console.WriteLine(index + $".  \nName:  {developer.Name}\n" +
                     $"\tBadge Number: {developer.BadgeNumber}\n" +
                     $"\tPluralSight Access Status: {developer.TypeOfAccess}\n" +
-                    $"\tTeam Affiliation:  {developer.Team}");
+                    $"\tTeam Affiliation: " + nameOfTeam);
                 index++;
             }
 
@@ -172,7 +177,7 @@ namespace Komodo_Console {
             int.TryParse(badgeAsString, out int k);
 
             developer.BadgeNumber = k;
-            if (k == 0) {
+            if (k <= 0) {
                 Console.WriteLine("Invalid entry.  Badge number has been assigned to 0. \n " +
                     "Please finish adding developer and then update badge number.\n\n\n");
             }
@@ -239,7 +244,7 @@ namespace Komodo_Console {
             string numOfDevString = (Console.ReadLine());
             int.TryParse(numOfDevString, out int k);
 
-            if (k == 0 || k > _developerRepo._listOfDevelopers.Count) {
+            if (k <= 0 || k > _developerRepo._listOfDevelopers.Count) {
                 Console.Clear();
                 Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.");
                 Menu();
@@ -249,7 +254,8 @@ namespace Komodo_Console {
             // bool wasDeletedFromTeam = _developerRepo.DeleteFromTeam();
 
             if (wasDeleted) {
-                Console.WriteLine("The developer was deleted. ");
+                Console.WriteLine("The developer was deleted and removed from most recent assigned team.\n" +
+                    "If developer was assigned to multiple teams, you need to manually remove from other teams.");
             }
             else {
                 Console.WriteLine("The developer could not be deleted.");

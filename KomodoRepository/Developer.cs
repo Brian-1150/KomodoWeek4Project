@@ -10,11 +10,11 @@ namespace Komodo_Repository {
         yes
     }
     public class Developer {
-        public DevTeam Team { get; set; }
+        public DevTeam Team { get; set; }   //why didn't I have to add an instance of DevTeam in this class
         public int BadgeNumber { get; set; }
         public string Name { get; set; }
         public AccessType TypeOfAccess { get; set; }
-        public string TeamAffiliation { get; set; }
+        //public string TeamAffiliation { get; set; }
 
         public Developer() { }
         public Developer(string name, int num, AccessType yesOrNo, DevTeam team) {
