@@ -19,9 +19,9 @@ namespace Komodo_Repository {
             return _listOfDevelopers;
         }
         //Update
-        public bool UpdateDeveloper(string name, Developer updatedInfo) {
+        public bool UpdateDeveloper(int index, Developer updatedInfo) {
             //Find the developer
-            Developer previousInfo = GetDeveloper(name);
+            Developer previousInfo = GetDeveloper(index);
             //Update the developer info
             if (previousInfo == null) {
                 return false;
@@ -71,12 +71,16 @@ namespace Komodo_Repository {
             return null;
         }
         public Developer GetDeveloper(int number) {
-            foreach (Developer developer in _listOfDevelopers) {
-                if (developer.BadgeNumber == number) {
-                    return developer;
-                }
+            if (_listOfDevelopers.ElementAt(number - 1) != null) {
+                return _listOfDevelopers.ElementAt(number - 1);
+
             }
-            return null;
+            else
+                return null;
+            }
+           
         }
+
+
     }
-}
+
