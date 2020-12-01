@@ -8,8 +8,8 @@ using Komodo_Repository;
 
 namespace Komodo_Console {
     public class ProgramUI {
-        private Developer devy = new Developer();
-        private DevTeam _devTeam = new DevTeam();
+        //private Developer devy = new Developer();
+        //private DevTeam _devTeam = new DevTeam();
         private DevTeamRepository _devTeamRepo = new DevTeamRepository();
         private DeveloperRepository _developerRepo = new DeveloperRepository();
         public void Run() {
@@ -111,7 +111,7 @@ namespace Komodo_Console {
 
                     string numOfDevString = (Console.ReadLine());
                     int.TryParse(numOfDevString, out int j);
-                      
+
                     while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
                         Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
                         Console.ReadKey();
@@ -120,14 +120,14 @@ namespace Komodo_Console {
                         Console.WriteLine($"Enter the index number of the team you wish to assign {developer.Name} to.");
 
                         numOfDevString = (Console.ReadLine());
-                        int.TryParse(numOfDevString, out  j);
+                        int.TryParse(numOfDevString, out j);
                     }
 
                     //foreach (DevTeam team in _devTeamRepo._listOfTeams) {
                     //    if (Console.ReadLine().ToLower() == team.TeamName.ToLower()) {
-                            developer.Team = _devTeamRepo._listOfTeams.ElementAt(j-1);
+                    developer.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
                     _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamMembers.Add(developer);
-                        
+
                     if (developer.Team == null) {
                         Console.WriteLine("Sorry that team name was not found and team affiliation was not updated");
                     }
@@ -163,19 +163,29 @@ namespace Komodo_Console {
             string team;
             List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();
             List<Developer> listOfDevelopers = _developerRepo.GetList();
-            foreach (Developer developer in listOfDevelopers) {
-                foreach (DevTeam devTeam in listOfTeams) {
-                    if (developer.Team == devTeam) {
-                        team = devTeam.TeamName;
-                    }
-                    else
-                        team = null;
-                        //team = developer.Team.TeamName;
-                        Console.WriteLine(index + $".  \nName:  {developer.Name}\n" +
-                            $"\tBadge Number: {developer.BadgeNumber}\n" +
-                            $"\tPluralSight Access Status: {developer.TypeOfAccess}\n" +
-                            $"\tTeam Affiliation: " + team);
-                        index++;
+
+            //foreach (Developer developer in listOfDevelopers) {
+            //    foreach (DevTeam devTeam in listOfTeams) {
+            //        if (developer.Team == devTeam) {
+            //            team = devTeam.TeamName;    // was forced to assign team name to string 
+            //        }
+            //        else
+            //            team = "";
+            //    }
+            //}
+
+                foreach (Developer developer in listOfDevelopers) {
+
+                Console.WriteLine(index + $".  \nName:  {developer.Name}\n" +
+                    $"\tBadge Number: {developer.BadgeNumber}\n" +
+                    $"\tPluralSight Access Status: {developer.TypeOfAccess}\n");
+                if (developer.Team != null) {
+                    Console.WriteLine($"\tTeam Affiliation: " + developer.Team.TeamName);  //I could not just  interpolate {dev.Team.TeamName}
+                    index++;
+                }
+                else {
+                    Console.WriteLine("\tTeam Affiliatin:  None ");
+                    index++;
                 }
             }
 
@@ -274,7 +284,7 @@ namespace Komodo_Console {
                 }
             } while (yesOrNo != "y" && yesOrNo != "n");  //just a loop to deal with user not entering n or y
 
-           
+
             //end
 
             bool wasUpdated = _developerRepo.UpdateDeveloper(k, developer);
@@ -298,7 +308,7 @@ namespace Komodo_Console {
             int.TryParse(numOfDevString, out int k);
 
             while (k <= 0 || k > _developerRepo._listOfDevelopers.Count) {
-               Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
+                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
                 Console.ReadKey();
                 Console.Clear();
                 ViewDevelopers();
@@ -307,8 +317,8 @@ namespace Komodo_Console {
                 int.TryParse(numOfDevString, out k);
 
             }
-             
-              
+
+
 
             bool wasDeleted = _developerRepo.DeleteDeveloper(k);
             // bool wasDeletedFromTeam = _developerRepo.DeleteFromTeam();
@@ -336,6 +346,7 @@ namespace Komodo_Console {
         //Methods for DevTeam
         //Create a New Team
         private void CreateTeam() {
+            List<Developer> newList = new List<Developer>();
             Console.Clear();
             DevTeam team = new DevTeam();
             //Get Name
@@ -348,130 +359,227 @@ namespace Komodo_Console {
 
                 int.TryParse(s, out int k);
                 team.TeamID = k;
-            } while (team.TeamID == 0);
+            } while (team.TeamID <= 0);
+
             //Loop to add multiple Developers at one time
-            int numOfDev;
-            ViewDevelopers();
+            string yesOrNo;
             do {
-                Console.WriteLine($"How many developers would you like to add to {team.TeamName}?\n" +
-                    $"A minimum of 1 team member is required."); //had to include because what if user intentionally enters 0
-                string s = Console.ReadLine();
+                Console.WriteLine($"Would you like to assign developers to {team.TeamName}? y/n");
 
-                int.TryParse(s, out int k);
-                numOfDev = k;
-            } while (numOfDev == 0);
-            if (numOfDev > _developerRepo._listOfDevelopers.Count) {
-                Console.WriteLine($"{numOfDev} is greater than the number of available developers.  Please try again.");
-                Menu();
-            }
-            List<Developer> newList = new List<Developer>(numOfDev);
-            for (int i = 0; i < numOfDev; i++) {
-                Console.WriteLine($"Enter the badge number of the next developer you wish to add to {team.TeamName}: ");
-                int id = int.Parse(Console.ReadLine());
+                yesOrNo = Console.ReadLine().ToLower();
+                if (yesOrNo == "y") {
+                    ViewDevelopers();
+                    Console.WriteLine($"How many developers would you like to add to {team.TeamName}?"); //Loop for Developers
+                    string tempString2 = (Console.ReadLine());
+                    int.TryParse(tempString2, out int k);
+                    while (k <= 0 || k > _developerRepo.GetList().Count) {
+                        Console.WriteLine("Invalid entry. You must enter and integer no greater than the number of available developers in the list.  Please try again.  Press any key to continue.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        ViewDevelopers();
+                        Console.WriteLine($"How many developers would you like to add to {team.TeamName}?");
+                        tempString2 = Console.ReadLine();
+                        int.TryParse(tempString2, out k);
 
-                foreach (Developer dev in _developerRepo._listOfDevelopers) {  //code to also add this team to the developer object
-                    if (id == dev.BadgeNumber) {
-                        dev.Team = team;
                     }
+
+                    Console.Clear();
+                    ViewDevelopers();
+
+                    string x;
+                    
+                        for (int i = 0; i < k; i++) {
+                             
+                                Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
+                                 x = Console.ReadLine();
+                        GetDeveloperByIndex(x);
+                        if (GetDeveloperByIndex(x) != null)
+                                newList.Add(GetDeveloperByIndex(x));
+                        while (GetDeveloperByIndex(x) == null) { Console.WriteLine("Invalid input.  Press a key to try again!\n");
+                            Console.ReadKey();
+                            Console.Clear();
+                            ViewDevelopers();
+                            Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
+                            x = Console.ReadLine();
+                            if (GetDeveloperByIndex(x) != null)
+                                newList.Add(GetDeveloperByIndex(x));
+                        }
+                            
+                        }
+                        team.TeamMembers = newList; 
+                    
                 }
-
-                newList.Add(_developerRepo.GetDeveloper(id));
+                else
+                if (yesOrNo == "n") {
+                    break;
+                }
+                else {
+                    Console.WriteLine("Please enter y or n.");
+                }
             }
-            team.TeamMembers = newList;
-            _devTeamRepo.CreateNewTeam(team);
+            while (yesOrNo != "y" && yesOrNo != "n");
 
+            _devTeamRepo.CreateNewTeam(team);
+            if (newList != null) {
+                foreach (Developer dev in newList) {
+                    dev.Team = team;
+                }
+            }
 
         }///View List of teams
-        int index = 1;
         private void ViewListOfTeams() {
-            List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();
-            foreach (DevTeam team in listOfTeams) {
-                Console.WriteLine(index + $"  {team.TeamName}");
+        int index = 1;
+            //List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();   //lets try omitting this step 12/1 920am
+            //foreach (DevTeam team in _devTeamRepo.GetListOfTeams()) {
+                foreach (DevTeam team in _devTeamRepo._listOfTeams) {
+                    Console.WriteLine(index + $"  {team.TeamName}");
+                index++;
             }
         }///Choose a team to see details
         private void ViewDetailsForTeam() {
             Console.Clear();
             ViewListOfTeams();
-            Console.WriteLine("Type the team name to see details:");
-            string teamChoice = Console.ReadLine().ToLower();
-            Console.Clear();
-            // List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();
-            int count = 0;
-            foreach (DevTeam team in _devTeamRepo.GetListOfTeams()) {
-                if (teamChoice == team.TeamName.ToLower()) {
-                    _devTeamRepo.TeamDetails(teamChoice);  //print details for team
-                    count++;
-                }
+            Console.WriteLine($"Enter the index number of the team you wish to view.");
+            string numOfDevString = (Console.ReadLine());
+            int.TryParse(numOfDevString, out int j);
+
+            while ( j <= 0 || j > _devTeamRepo._listOfTeams.Count) { //bad entry here causing ViewListOfTeams to increase index.  Why isn't each call to that method creating a fresh run of that method??  12/1 903am
+                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
+                Console.ReadKey();
+                //Console.Clear();
+                //ViewListOfTeams();         //trying to remove this clear and second call to method to fix... helped first time through but not second
+                Console.WriteLine($"Enter an index number to see details for the team.");
+
+                numOfDevString = (Console.ReadLine());
+                int.TryParse(numOfDevString, out j);
             }
-            if (count == 0) {                      //condition for "if there was no teamchoice==team match"??
-                Console.WriteLine("Please check your spelling and try again");
-            }
+
+            _devTeamRepo.TeamDetails(j);
 
 
         }
         //Add developers and make any other changes to team
         private void AddDevelopersToTeam() {
             Console.Clear();
-            ViewListOfTeams();
+         
             //Choose team to edit
-            Console.WriteLine("\n To which Team would you like to add a developer?");
-            string teamNameString = Console.ReadLine();
+
+
+            ViewListOfTeams();
+            Console.WriteLine($"Enter the index number of the team you wish to edit.");
+
+            string tempString = (Console.ReadLine());
+            int.TryParse(tempString, out int j);
+
+            while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
+                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+                ViewListOfTeams();
+                Console.WriteLine($"Enter the index number of the team you wish to edit.");
+
+                tempString = (Console.ReadLine());
+                int.TryParse(tempString, out j);
+            }
+
             DevTeam team = new DevTeam();
+            List<Developer> newList = new List<Developer>();
             //Create a new instance of DevTeam
             Console.WriteLine("Re-enter or update team name: ");  //Name
             team.TeamName = Console.ReadLine();
-            Console.WriteLine($"Confirm or update Team ID"); //ID
-            team.TeamID = int.Parse(Console.ReadLine());
-            Console.WriteLine($"How many developers would you like to add to {team.TeamName}?"); //Loop for Developers
-            int numOfDev = int.Parse(Console.ReadLine());
-            List<Developer> newList = new List<Developer>(numOfDev);
-            ViewDevelopers();
-            for (int i = 0; i < numOfDev; i++) {
-                Console.WriteLine($"Enter the badge number of the next developer you wish to add to {team.TeamName}: ");
-                int id = int.Parse(Console.ReadLine());
+            Console.WriteLine($"Team ID is locked.  Please see administrator if this needs changed.  \n"); //ID
+            //Loop to add multiple Developers at one time
+            string yesOrNo;
+            do {
+                Console.WriteLine($"Would you like to assign developers to {team.TeamName}? y/n");
 
-                foreach (Developer dev in _developerRepo._listOfDevelopers) {  //code to also add this team to the developer object
-                    if (id == dev.BadgeNumber) {
-                        dev.Team = team;
+                yesOrNo = Console.ReadLine().ToLower();
+                if (yesOrNo == "y") {
+                    ViewDevelopers();
+                    Console.WriteLine($"How many developers would you like to add to {team.TeamName}?"); //Loop for Developers
+                    string tempString2 = (Console.ReadLine());
+                    int.TryParse(tempString2, out int k);
+                    while (k <= 0 || k > _developerRepo.GetList().Count) {
+                        Console.WriteLine("Invalid entry. You must enter and integer no greater than the number of available developers in the list.  Please try again.  Press any key to continue.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        ViewDevelopers();
+                        Console.WriteLine($"How many developers would you like to add to {team.TeamName}?");
+                        tempString2 = Console.ReadLine();
+                        int.TryParse(tempString2, out k);
+
                     }
+
+                    Console.Clear();
+                    ViewDevelopers();
+
+                    string x;
+
+                    for (int i = 0; i < k; i++) {
+
+                        Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
+                        x = Console.ReadLine();
+                        GetDeveloperByIndex(x);
+                        if (GetDeveloperByIndex(x) != null)
+                            newList.Add(GetDeveloperByIndex(x));
+                        while (GetDeveloperByIndex(x) == null) {
+                            Console.WriteLine("Invalid input.  Press a key to try again!\n");
+                            Console.ReadKey();
+                            Console.Clear();
+                            ViewDevelopers();
+                            Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
+                            x = Console.ReadLine();
+                            if (GetDeveloperByIndex(x) != null)
+                                newList.Add(GetDeveloperByIndex(x));
+                        }
+
+                    }
+                    team.TeamMembers = newList;
+
                 }
-
-                // Developer next = _developerRepo.GetDeveloper(id);
-                newList.Add(_developerRepo.GetDeveloper(id));
+                else
+                if (yesOrNo == "n") {
+                    break;
+                }
+                else {
+                    Console.WriteLine("Please enter y or n.");
+                }
             }
-            team.TeamMembers = newList;
-            _devTeamRepo.UpdateTeam(teamNameString, team);
+            while (yesOrNo != "y" && yesOrNo != "n");
 
+            if (_devTeamRepo.UpdateTeam(j, team)) {
+                Console.WriteLine("Success");
+            }
+            else {
+                Console.WriteLine("Update failed");
+            }
         }
-        // For example, why was I not able to call this public method directly from DevTeamRepository ?? TeamDetails(Colts);
+
+
         private void RemoveDevFromTeam() {
 
             Console.Clear();
             ViewListOfTeams();
-            Console.WriteLine("From which team do you wish to remove developers?");
-            string teamChoice = Console.ReadLine().ToLower();
+            Console.WriteLine("From which team do you wish to remove developers?  Enter the index number on the left.");
 
-            Console.Clear();
+            string numOfDevString = (Console.ReadLine());
+            int.TryParse(numOfDevString, out int j);
 
-            int count = 0;
-            foreach (DevTeam team in _devTeamRepo.GetListOfTeams()) {
-                if (teamChoice == team.TeamName.ToLower()) {
-                    _devTeamRepo.TeamDetails(teamChoice);  //print details for team
-                    count++;
-                }
+            while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
+                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+                ViewListOfTeams();
+                Console.WriteLine($"Enter an index number for the team to remove a developer.");
+
+                numOfDevString = (Console.ReadLine());
+                int.TryParse(numOfDevString, out j);
             }
-            if (count == 0) {                      //condition for "if there was no teamchoice==team match"??
-                Console.WriteLine("Please check your spelling and try again");
-                return;
-            }
 
-            _devTeamRepo.RemoveDeveloper(teamChoice);
+            _devTeamRepo.RemoveDeveloper(j);
 
-
-            //print details for team
-            //right here I want to call to a method to add or remove directly from list of developers on a team
         }
-        //private void AddRemove() {
+
 
 
 
@@ -493,14 +601,23 @@ namespace Komodo_Console {
             _developerRepo.AddToList(a);
             Colts.TeamMembers = test;
         }
-        //public DevTeam GetTeamMethodMainFile(string name) {
-        //    foreach (DevTeam team in _devTeamRepo) {
-        //        if (team.TeamName == name) {
-        //            return team;
-        //        }
-        //    }
-        //    return null;
-        //
+
+
+
+
+        public Developer GetDeveloperByIndex(string index) {
+            int.TryParse(index, out int k);
+            if (k <= 0 || k > _developerRepo.GetList().Count) {
+                return null;
+            }
+            else {
+                return _developerRepo.GetList().ElementAt(k - 1);
+            }
+
+
+        }
     }
+
 }
+
 

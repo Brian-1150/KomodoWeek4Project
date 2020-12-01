@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Komodo_Repository {
     public class DeveloperRepository {
-        
+
         public List<Developer> _listOfDevelopers = new List<Developer>();
 
         //Create
@@ -36,8 +36,8 @@ namespace Komodo_Repository {
         }
         //Delete
         public bool DeleteDeveloper(int number) {
-              
-                int count = _listOfDevelopers.Count;
+
+            int count = _listOfDevelopers.Count;
             Developer dev = _listOfDevelopers.ElementAt(number - 1);
             if (dev.Team != null) {
                 DevTeam team = dev.Team;
@@ -49,16 +49,16 @@ namespace Komodo_Repository {
                 //}
             }
 
-            _listOfDevelopers.RemoveAt(number-1);
-                if (count > _listOfDevelopers.Count) {
+            _listOfDevelopers.RemoveAt(number - 1);
+            if (count > _listOfDevelopers.Count) {
 
-                    return true;
-                }
-                else {
-                    return false;
-                }
+                return true;
             }
-        
+            else {
+                return false;
+            }
+        }
+
 
 
         //Helper Methods
@@ -77,10 +77,14 @@ namespace Komodo_Repository {
             }
             else
                 return null;
-            }
-           
         }
 
 
+
     }
+
+}
+
+
+
 
