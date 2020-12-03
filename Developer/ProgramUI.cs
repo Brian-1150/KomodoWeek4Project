@@ -164,15 +164,15 @@ namespace Komodo_Console {
             List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();
             List<Developer> listOfDevelopers = _developerRepo.GetList();
 
-            
 
-                foreach (Developer developer in listOfDevelopers) {
+
+            foreach (Developer developer in listOfDevelopers) {
 
                 Console.WriteLine("\n" + index + $".      Name:  {developer.Name}\n" +
                     $"\tBadge Number: {developer.BadgeNumber}\n" +
                     $"\tPluralSight Access Status: {developer.TypeOfAccess}");
                 if (developer.Team != null) {
-                    Console.WriteLine($"\tTeam Affiliation: { developer.Team.TeamName}");  
+                    Console.WriteLine($"\tTeam Affiliation: { developer.Team.TeamName}");
                     index++;
                 }
                 else {
@@ -197,7 +197,7 @@ namespace Komodo_Console {
                 Console.ReadKey();
                 Console.Clear();
                 ViewDevelopers();
-                Console.WriteLine("Enter the index number of the fired developer: ");
+                Console.WriteLine("Enter the index number of the developer you wish to edit: ");
                 numOfDevString = (Console.ReadLine());
                 int.TryParse(numOfDevString, out k);
 
@@ -209,18 +209,9 @@ namespace Komodo_Console {
             Console.WriteLine("Enter the new name: ");
             developer.Name = Console.ReadLine();
 
-            Console.WriteLine($"Enter the badge number for {developer.Name}");
-            string badgeAsString = Console.ReadLine();
-            int.TryParse(badgeAsString, out int el);
+            Console.WriteLine($"FYI badge numbers cannot be changed.");
+            developer.BadgeNumber = GetDeveloperByIndex(numOfDevString).BadgeNumber;
 
-            developer.BadgeNumber = el;
-            if (el == 0) {
-                Console.WriteLine("Invalid entry.  Badge number has been assigned to 0. \n " +
-                    "Please finish adding developer and then update badge number.\n\n\n");
-            }
-
-
-            //start
 
             string yesOrNo;
             do {
@@ -245,9 +236,18 @@ namespace Komodo_Console {
                         int.TryParse(numOfDevString2, out j);
                     }
 
-                   
-                    developer.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
-                    _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamMembers.Add(developer);
+                    if (GetDeveloperByIndex(numOfDevString).Team == null) {
+                        developer.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
+                        _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamMembers.Add(developer);  //avoiding null exception for next if..
+                    }
+                    else if (GetDeveloperByIndex(numOfDevString).Team == _devTeamRepo._listOfTeams.ElementAt(j - 1)) {
+                        Console.WriteLine("Developer was already assigned to that team and cannot be added agian.");
+                        developer.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
+                    }
+                    else {
+                        developer.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
+                        _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamMembers.Add(developer);
+                    }
 
                     if (developer.Team == null) {
                         Console.WriteLine("Sorry that team name was not found and team affiliation was not updated");
@@ -312,7 +312,7 @@ namespace Komodo_Console {
 
 
             bool wasDeleted = _developerRepo.DeleteDeveloper(k);
-            
+
             if (wasDeleted) {
                 Console.WriteLine("The developer was deleted and removed from most recently assigned team.  \n" +
                     "If developer was assigned to multiple teams you may have to manually remove from additional teams.");
@@ -377,24 +377,24 @@ namespace Komodo_Console {
                     ViewDevelopers();
 
                     string x;
-                    
-                        for (int i = 0; i < k; i++) {
-                             
-                                Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
-                                 x = Console.ReadLine();
+
+                    for (int i = 0; i < k; i++) {
+
+                        Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
+                        x = Console.ReadLine();
                         GetDeveloperByIndex(x);
                         if (GetDeveloperByIndex(x) != null)
                             foreach (Developer dev in newList) {
                                 if (dev.Name == GetDeveloperByIndex(x).Name) {
                                     Console.WriteLine("That developer was already added and could not be added again");
                                     goto GetOutOfLoop;
-                                    
+
                                 }
 
                             }
-                                newList.Add(GetDeveloperByIndex(x));
-                      
-                        while (GetDeveloperByIndex(x) == null) { 
+                        newList.Add(GetDeveloperByIndex(x));
+
+                        while (GetDeveloperByIndex(x) == null) {
                             Console.WriteLine("Invalid input.  Press a key to try again!\n");
                             Console.ReadKey();
                             Console.Clear();
@@ -408,8 +408,8 @@ namespace Komodo_Console {
                     GetOutOfLoop: Console.WriteLine(""); //label to break out of loop if user trys to add the same dev
 
                     }
-                        team.TeamMembers = newList; 
-                    
+                    team.TeamMembers = newList;
+
                 }
                 else
                 if (yesOrNo == "n") {
@@ -430,11 +430,11 @@ namespace Komodo_Console {
 
         }///View List of teams
         private void ViewListOfTeams() {
-        int index = 1;
+            int index = 1;
             //List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();   //lets try omitting this step 12/1 920am
             //foreach (DevTeam team in _devTeamRepo.GetListOfTeams()) {
-                foreach (DevTeam team in _devTeamRepo._listOfTeams) {
-                    Console.WriteLine(index + $"  {team.TeamName}");
+            foreach (DevTeam team in _devTeamRepo._listOfTeams) {
+                Console.WriteLine(index + $"  {team.TeamName}");
                 index++;
             }
         }///Choose a team to see details
@@ -445,11 +445,9 @@ namespace Komodo_Console {
             string numOfDevString = (Console.ReadLine());
             int.TryParse(numOfDevString, out int j);
 
-            while ( j <= 0 || j > _devTeamRepo._listOfTeams.Count) { //bad entry here causing ViewListOfTeams to increase index.  Why isn't each call to that method creating a fresh run of that method??  12/1 903am
+            while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
                 Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
                 Console.ReadKey();
-                //Console.Clear();
-                //ViewListOfTeams();         //trying to remove this clear and second call to method to fix... helped first time through but not second
                 Console.WriteLine($"Enter an index number to see details for the team.");
 
                 numOfDevString = (Console.ReadLine());
@@ -462,9 +460,9 @@ namespace Komodo_Console {
         }
         //Add developers and make any other changes to team
         private void AddDevelopersToTeam() {
-            
+
             Console.Clear();
-         
+
             //Choose team to edit
 
 
@@ -488,8 +486,18 @@ namespace Komodo_Console {
             DevTeam team = new DevTeam();
             List<Developer> newList = new List<Developer>();
             //Create a new instance of DevTeam
-            Console.WriteLine("Re-enter or update team name: ");  //Name
-            team.TeamName = Console.ReadLine();
+            string response;
+
+            Console.WriteLine("Do you wish to update team name at this time? y/n");
+            response = Console.ReadLine().ToLower();
+            if (response == "y") {
+                Console.WriteLine("What is the new team name: ");  //Name
+                team.TeamName = Console.ReadLine();
+            }
+            else {
+                string oldName = _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName;
+                team.TeamName = oldName;
+            }
             Console.WriteLine($"FYI Team ID cannot be changed.\n"); //ID
             //Loop to add multiple Developers at one time
             string yesOrNo;
@@ -499,12 +507,12 @@ namespace Komodo_Console {
                 yesOrNo = Console.ReadLine().ToLower();
                 if (yesOrNo == "y") {
                     ViewDevelopers();
-                   
+
                     Console.WriteLine($"How many developers would you like to add to {team.TeamName}?"); //Loop for Developers
                     string tempString2 = (Console.ReadLine());
                     int.TryParse(tempString2, out int k);
                     while (k <= 0 || k > _developerRepo.GetList().Count) {
-                        Console.WriteLine("Invalid entry. You must enter and integer no greater than the number of available developers in the list.  Please try again.  Press any key to continue.");
+                        Console.WriteLine("Invalid entry. You must enter and integer no greater than the number of available developers in the list.  Please try again.");
                         Console.ReadKey();
                         Console.Clear();
                         ViewDevelopers();
@@ -523,25 +531,58 @@ namespace Komodo_Console {
 
                         Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                         x = Console.ReadLine();
-                        GetDeveloperByIndex(x);
-                        if (GetDeveloperByIndex(x) != null)
-                            newList.Add(GetDeveloperByIndex(x));
-                        while (GetDeveloperByIndex(x) == null) {
-                            Console.WriteLine("Invalid input.  Press a key to try again!\n");
-                            Console.ReadKey();
-                            Console.Clear();
-                            ViewDevelopers();
-                            Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
-                            x = Console.ReadLine();
-                            if (GetDeveloperByIndex(x) != null) {
-                                if (GetDeveloperByIndex(x).Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j-1).TeamName) {
-                                    Console.WriteLine("Hi");
-                                }
-                                newList.Add(GetDeveloperByIndex(x));
-                             
-                               } 
+                        Developer ex = GetDeveloperByIndex(x);
+                        if ((ex) != null) {
+
+                            if (ex.Team == null) {
+                                ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
+                                newList.Add(ex);  //this if statement aviods null exception for the next if...
+                            }
+                            else
+                            if (ex.Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName)
+                            //    string devPrevAssignedTeamName = GetDeveloperByIndex(x).Team.TeamName;
+                            //string teamToUpdateTeamName = _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName;
+                            //if (devPrevAssignedTeamName == teamToUpdateTeamName)
+
+                            {
+                                /*testing to catch duplicate dev*/
+                                Console.WriteLine("That developer was already assigned and cannot be added again");
+                            }
+                            else {
+                                newList.Add(ex);
+                                ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
+                            }
                         }
-                        
+                        while (ex == null) {
+                            Console.WriteLine("Invalid input. Try again!\n");
+
+
+
+                            x = Console.ReadLine();
+                            ex = GetDeveloperByIndex(x);
+                            if ((ex) != null) {
+
+                                if (ex.Team == null) {
+                                    ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
+                                    newList.Add(ex);  //this if statement aviods null exception for the next if...
+                                }
+                                else
+                                if (ex.Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName)
+                                //    string devPrevAssignedTeamName = GetDeveloperByIndex(x).Team.TeamName;
+                                //string teamToUpdateTeamName = _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName;
+                                //if (devPrevAssignedTeamName == teamToUpdateTeamName)
+
+                                {
+                                    /*testing to catch duplicate dev*/
+                                    Console.WriteLine("That developer was already assigned and cannot be added again");
+                                }
+                                else {
+                                    newList.Add(ex);
+                                    ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
+                                }
+                            }
+                        }
+
 
                     }
                     team.TeamMembers = newList;
@@ -614,14 +655,14 @@ namespace Komodo_Console {
 
 
 
-
+        //Helper methods
         public Developer GetDeveloperByIndex(string index) {
             int.TryParse(index, out int k);
-            if (k <= 0 || k > _developerRepo.GetList().Count) {
+            if (k <= 0 || k > _developerRepo._listOfDevelopers.Count) {
                 return null;
             }
             else {
-                return _developerRepo.GetList().ElementAt(k - 1);
+                return _developerRepo._listOfDevelopers.ElementAt(k - 1);
             }
 
 
@@ -653,8 +694,8 @@ namespace Komodo_Console {
             }
 
 
-        
-    }
+
+        }
     }
 
 }
