@@ -164,23 +164,15 @@ namespace Komodo_Console {
             List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();
             List<Developer> listOfDevelopers = _developerRepo.GetList();
 
-            //foreach (Developer developer in listOfDevelopers) {
-            //    foreach (DevTeam devTeam in listOfTeams) {
-            //        if (developer.Team == devTeam) {
-            //            team = devTeam.TeamName;    // was forced to assign team name to string 
-            //        }
-            //        else
-            //            team = "";
-            //    }
-            //}
+            
 
                 foreach (Developer developer in listOfDevelopers) {
 
-                Console.WriteLine(index + $".  \nName:  {developer.Name}\n" +
+                Console.WriteLine("\n" + index + $".      Name:  {developer.Name}\n" +
                     $"\tBadge Number: {developer.BadgeNumber}\n" +
-                    $"\tPluralSight Access Status: {developer.TypeOfAccess}\n");
+                    $"\tPluralSight Access Status: {developer.TypeOfAccess}");
                 if (developer.Team != null) {
-                    Console.WriteLine($"\tTeam Affiliation: " + developer.Team.TeamName);  //I could not just  interpolate {dev.Team.TeamName}
+                    Console.WriteLine($"\tTeam Affiliation: { developer.Team.TeamName}");  
                     index++;
                 }
                 else {
@@ -253,8 +245,7 @@ namespace Komodo_Console {
                         int.TryParse(numOfDevString2, out j);
                     }
 
-                    //foreach (DevTeam team in _devTeamRepo._listOfTeams) {
-                    //    if (Console.ReadLine().ToLower() == team.TeamName.ToLower()) {
+                   
                     developer.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
                     _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamMembers.Add(developer);
 
@@ -321,8 +312,7 @@ namespace Komodo_Console {
 
 
             bool wasDeleted = _developerRepo.DeleteDeveloper(k);
-            // bool wasDeletedFromTeam = _developerRepo.DeleteFromTeam();
-
+            
             if (wasDeleted) {
                 Console.WriteLine("The developer was deleted and removed from most recently assigned team.  \n" +
                     "If developer was assigned to multiple teams you may have to manually remove from additional teams.");
@@ -394,8 +384,18 @@ namespace Komodo_Console {
                                  x = Console.ReadLine();
                         GetDeveloperByIndex(x);
                         if (GetDeveloperByIndex(x) != null)
+                            foreach (Developer dev in newList) {
+                                if (dev.Name == GetDeveloperByIndex(x).Name) {
+                                    Console.WriteLine("That developer was already added and could not be added again");
+                                    goto GetOutOfLoop;
+                                    
+                                }
+
+                            }
                                 newList.Add(GetDeveloperByIndex(x));
-                        while (GetDeveloperByIndex(x) == null) { Console.WriteLine("Invalid input.  Press a key to try again!\n");
+                      
+                        while (GetDeveloperByIndex(x) == null) { 
+                            Console.WriteLine("Invalid input.  Press a key to try again!\n");
                             Console.ReadKey();
                             Console.Clear();
                             ViewDevelopers();
@@ -403,9 +403,11 @@ namespace Komodo_Console {
                             x = Console.ReadLine();
                             if (GetDeveloperByIndex(x) != null)
                                 newList.Add(GetDeveloperByIndex(x));
+
                         }
-                            
-                        }
+                    GetOutOfLoop: Console.WriteLine(""); //label to break out of loop if user trys to add the same dev
+
+                    }
                         team.TeamMembers = newList; 
                     
                 }
@@ -460,6 +462,7 @@ namespace Komodo_Console {
         }
         //Add developers and make any other changes to team
         private void AddDevelopersToTeam() {
+            
             Console.Clear();
          
             //Choose team to edit
@@ -487,7 +490,7 @@ namespace Komodo_Console {
             //Create a new instance of DevTeam
             Console.WriteLine("Re-enter or update team name: ");  //Name
             team.TeamName = Console.ReadLine();
-            Console.WriteLine($"Team ID is locked.  Please see administrator if this needs changed.  \n"); //ID
+            Console.WriteLine($"FYI Team ID cannot be changed.\n"); //ID
             //Loop to add multiple Developers at one time
             string yesOrNo;
             do {
@@ -496,6 +499,7 @@ namespace Komodo_Console {
                 yesOrNo = Console.ReadLine().ToLower();
                 if (yesOrNo == "y") {
                     ViewDevelopers();
+                   
                     Console.WriteLine($"How many developers would you like to add to {team.TeamName}?"); //Loop for Developers
                     string tempString2 = (Console.ReadLine());
                     int.TryParse(tempString2, out int k);
@@ -529,9 +533,15 @@ namespace Komodo_Console {
                             ViewDevelopers();
                             Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                             x = Console.ReadLine();
-                            if (GetDeveloperByIndex(x) != null)
+                            if (GetDeveloperByIndex(x) != null) {
+                                if (GetDeveloperByIndex(x).Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j-1).TeamName) {
+                                    Console.WriteLine("Hi");
+                                }
                                 newList.Add(GetDeveloperByIndex(x));
+                             
+                               } 
                         }
+                        
 
                     }
                     team.TeamMembers = newList;
@@ -616,6 +626,35 @@ namespace Komodo_Console {
 
 
         }
+
+        public void ListExludeFromCurrentTeam(int x) {
+            Console.Clear();
+            int index = 1;
+            string team;
+            List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();
+            List<Developer> listOfDevelopers = _developerRepo.GetList();
+
+
+
+            foreach (Developer developer in listOfDevelopers) {
+                if (developer.Team != listOfTeams.ElementAt(x)) {
+                    Console.WriteLine("\n" + index + $".      Name:  {developer.Name}\n" +
+                        $"\tBadge Number: {developer.BadgeNumber}\n" +
+                        $"\tPluralSight Access Status: {developer.TypeOfAccess}");
+                    if (developer.Team != null) {
+                        Console.WriteLine($"\tTeam Affiliation: { developer.Team.TeamName}");
+                        index++;
+                    }
+                    else {
+                        Console.WriteLine("\tTeam Affiliatin:  None ");
+                        index++;
+                    }
+                }
+            }
+
+
+        
+    }
     }
 
 }
