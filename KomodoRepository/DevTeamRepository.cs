@@ -30,15 +30,15 @@ namespace Komodo_Repository {
             }
             else {
                 previousInfo.TeamName = updatedInfo.TeamName;
-                previousInfo.TeamID = updatedInfo.TeamID;
+                
                 //tempList.AddRange(updatedInfo.TeamMembers); //combine 2 lists instead of replacing one with the other
                 if (updatedInfo.TeamMembers != null) {
                     if (previousInfo.TeamMembers == null) {
                         previousInfo.TeamMembers = updatedInfo.TeamMembers;
                     }
                 previousInfo.TeamMembers.AddRange(updatedInfo.TeamMembers);
-                    List<Developer> removeDup = updatedInfo.TeamMembers.Distinct().ToList();   // to eliminate duplicates
-                    updatedInfo.TeamMembers = removeDup;
+                    updatedInfo.TeamMembers = updatedInfo.TeamMembers.Distinct().ToList();   // to eliminate duplicates
+                  
                 }
 
                 return true;

@@ -42,11 +42,7 @@ namespace Komodo_Repository {
             if (dev.Team != null) {
                 DevTeam team = dev.Team;
                 team.TeamMembers.Remove(dev);
-                //foreach (Developer temp in team.TeamMembers) {
-                //    if (temp == dev) {
-                //        team.TeamMembers.Remove(temp);
-                //    }
-                //}
+                
             }
 
             _listOfDevelopers.RemoveAt(number - 1);
