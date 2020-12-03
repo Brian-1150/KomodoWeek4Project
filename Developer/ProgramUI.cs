@@ -72,7 +72,7 @@ namespace Komodo_Console {
                         exit = true;
                         break;
                     default:
-                        Console.WriteLine("Please enter a valid number 1-5");
+                        Console.WriteLine("Please enter a valid number 1-10");
                         break;
                 }
                 Console.WriteLine("Please press any key to continue..."); //just to pause and let user know he is in control of proceeding
@@ -90,15 +90,21 @@ namespace Komodo_Console {
             Developer developer = new Developer();
             Console.WriteLine("Enter the name of the new developer:");
             developer.Name = Console.ReadLine();
-
+        Badge: Console.WriteLine("");
             Console.WriteLine($"Enter the badge number for {developer.Name}");
             string badgeAsString = Console.ReadLine();
             int.TryParse(badgeAsString, out int k);
 
             developer.BadgeNumber = k;
             if (k == 0) {
-                Console.WriteLine("Invalid entry.  Badge number has been assigned to 0. \n " +
-                    "Please finish adding developer and then update badge number.");
+                Console.WriteLine("Invalid entry.  Try again.");
+                goto Badge;
+            }
+            foreach (Developer dev in _developerRepo._listOfDevelopers) {
+                if (k == dev.BadgeNumber) {
+                    Console.WriteLine("That number is alredy assigned to another developer.  Please enter a unique ID");
+                    goto Badge;
+                }
             }
             string yesOrNo;
             do {
@@ -113,10 +119,8 @@ namespace Komodo_Console {
                     int.TryParse(numOfDevString, out int j);
 
                     while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
-                        Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        ViewListOfTeams();
+                        Console.WriteLine("Invalid entry.   Please try again.");
+                       
                         Console.WriteLine($"Enter the index number of the team you wish to assign {developer.Name} to.");
 
                         numOfDevString = (Console.ReadLine());
@@ -193,10 +197,8 @@ namespace Komodo_Console {
             int.TryParse(numOfDevString, out int k);
 
             while (k <= 0 || k > _developerRepo._listOfDevelopers.Count) {
-                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
-                Console.ReadKey();
-                Console.Clear();
-                ViewDevelopers();
+                Console.WriteLine("Invalid entry. Please try again. ");
+               
                 Console.WriteLine("Enter the index number of the developer you wish to edit: ");
                 numOfDevString = (Console.ReadLine());
                 int.TryParse(numOfDevString, out k);
@@ -226,10 +228,8 @@ namespace Komodo_Console {
                     int.TryParse(numOfDevString2, out int j);
 
                     while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
-                        Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        ViewListOfTeams();
+                        Console.WriteLine("Invalid entry. Please try again.");
+                        
                         Console.WriteLine($"Enter the index number of the team you wish to assign {developer.Name} to.");
 
                         numOfDevString2 = (Console.ReadLine());
@@ -299,10 +299,8 @@ namespace Komodo_Console {
             int.TryParse(numOfDevString, out int k);
 
             while (k <= 0 || k > _developerRepo._listOfDevelopers.Count) {
-                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
-                Console.ReadKey();
-                Console.Clear();
-                ViewDevelopers();
+                Console.WriteLine("Invalid entry.  Please try again.  ");
+               
                 Console.WriteLine("Enter the index number of the fired developer: ");
                 numOfDevString = (Console.ReadLine());
                 int.TryParse(numOfDevString, out k);
@@ -344,11 +342,18 @@ namespace Komodo_Console {
             team.TeamName = Console.ReadLine();
             //Get ID
             do {
+            TeamBadge: Console.WriteLine("");
                 Console.WriteLine($"Enter the numerical Team ID for {team.TeamName}");
                 string s = Console.ReadLine();
 
                 int.TryParse(s, out int k);
                 team.TeamID = k;
+                foreach (DevTeam tm in _devTeamRepo._listOfTeams) {
+                    if (tm.TeamID == k ) {
+                        Console.WriteLine("That ID has already been assigned.  Please enter a unique TeamID");
+                        goto TeamBadge;
+                    }
+                }
             } while (team.TeamID <= 0);
 
             //Loop to add multiple Developers at one time
@@ -363,10 +368,8 @@ namespace Komodo_Console {
                     string tempString2 = (Console.ReadLine());
                     int.TryParse(tempString2, out int k);
                     while (k <= 0 || k > _developerRepo.GetList().Count) {
-                        Console.WriteLine("Invalid entry. You must enter and integer no greater than the number of available developers in the list.  Please try again.  Press any key to continue.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        ViewDevelopers();
+                        Console.WriteLine("Invalid entry.  Please try again. ");
+                        
                         Console.WriteLine($"How many developers would you like to add to {team.TeamName}?");
                         tempString2 = Console.ReadLine();
                         int.TryParse(tempString2, out k);
@@ -382,17 +385,19 @@ namespace Komodo_Console {
 
                         Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                         x = Console.ReadLine();
-                        GetDeveloperByIndex(x);
-                        if (GetDeveloperByIndex(x) != null)
+                         Developer ex = GetDeveloperByIndex(x);
+                        if (ex != null) {
                             foreach (Developer dev in newList) {
-                                if (dev.Name == GetDeveloperByIndex(x).Name) {
+                                if (dev.Name == ex.Name) {
                                     Console.WriteLine("That developer was already added and could not be added again");
                                     goto GetOutOfLoop;
 
                                 }
 
                             }
-                        newList.Add(GetDeveloperByIndex(x));
+                       
+                        newList.Add(ex);
+                        }
 
                         while (GetDeveloperByIndex(x) == null) {
                             Console.WriteLine("Invalid input.  Press a key to try again!\n");
@@ -401,8 +406,9 @@ namespace Komodo_Console {
                             ViewDevelopers();
                             Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                             x = Console.ReadLine();
-                            if (GetDeveloperByIndex(x) != null)
-                                newList.Add(GetDeveloperByIndex(x));
+                            ex = GetDeveloperByIndex(x);
+                            if (ex != null)
+                                newList.Add(ex);
 
                         }
                     GetOutOfLoop: Console.WriteLine(""); //label to break out of loop if user trys to add the same dev
@@ -446,8 +452,8 @@ namespace Komodo_Console {
             int.TryParse(numOfDevString, out int j);
 
             while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
-                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
-                Console.ReadKey();
+                Console.WriteLine("Invalid entry.   Please try again.");
+                
                 Console.WriteLine($"Enter an index number to see details for the team.");
 
                 numOfDevString = (Console.ReadLine());
@@ -473,10 +479,8 @@ namespace Komodo_Console {
             int.TryParse(tempString, out int j);
 
             while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
-                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
-                Console.ReadKey();
-                Console.Clear();
-                ViewListOfTeams();
+                Console.WriteLine("Invalid entry.  Please try again.");
+               
                 Console.WriteLine($"Enter the index number of the team you wish to edit.");
 
                 tempString = (Console.ReadLine());
@@ -487,7 +491,7 @@ namespace Komodo_Console {
             List<Developer> newList = new List<Developer>();
             //Create a new instance of DevTeam
             string response;
-
+            _devTeamRepo.TeamDetails(j);
             Console.WriteLine("Do you wish to update team name at this time? y/n");
             response = Console.ReadLine().ToLower();
             if (response == "y") {
@@ -512,10 +516,8 @@ namespace Komodo_Console {
                     string tempString2 = (Console.ReadLine());
                     int.TryParse(tempString2, out int k);
                     while (k <= 0 || k > _developerRepo.GetList().Count) {
-                        Console.WriteLine("Invalid entry. You must enter and integer no greater than the number of available developers in the list.  Please try again.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        ViewDevelopers();
+                        Console.WriteLine("Invalid entry.  Please try again.");
+                        
                         Console.WriteLine($"How many developers would you like to add to {team.TeamName}?");
                         tempString2 = Console.ReadLine();
                         int.TryParse(tempString2, out k);
@@ -532,11 +534,11 @@ namespace Komodo_Console {
                         Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                         x = Console.ReadLine();
                         Developer ex = GetDeveloperByIndex(x);
-                        if ((ex) != null) {
+                        if (ex != null) {
 
                             if (ex.Team == null) {
                                 ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
-                                newList.Add(ex);  //this if statement aviods null exception for the next if...
+                                newList.Add(ex);  //this if statement avoids null exception for the next if...
                             }
                             else
                             if (ex.Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName)
@@ -553,6 +555,7 @@ namespace Komodo_Console {
                                 ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
                             }
                         }
+                        //else continue;
                         while (ex == null) {
                             Console.WriteLine("Invalid input. Try again!\n");
 
@@ -560,11 +563,11 @@ namespace Komodo_Console {
 
                             x = Console.ReadLine();
                             ex = GetDeveloperByIndex(x);
-                            if ((ex) != null) {
+                            if (ex != null) {
 
                                 if (ex.Team == null) {
                                     ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
-                                    newList.Add(ex);  //this if statement aviods null exception for the next if...
+                                    newList.Add(ex);  //this if statement avoids null exception for the next if...
                                 }
                                 else
                                 if (ex.Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName)
@@ -617,10 +620,8 @@ namespace Komodo_Console {
             int.TryParse(numOfDevString, out int j);
 
             while (j <= 0 || j > _devTeamRepo._listOfTeams.Count) {
-                Console.WriteLine("Invalid entry. Are you sure you entered the index number on the left?  Please try again.  Press any key to continue.");
-                Console.ReadKey();
-                Console.Clear();
-                ViewListOfTeams();
+                Console.WriteLine("Invalid entry.  Please try again.");
+               
                 Console.WriteLine($"Enter an index number for the team to remove a developer.");
 
                 numOfDevString = (Console.ReadLine());
