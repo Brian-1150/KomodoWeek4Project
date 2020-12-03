@@ -382,17 +382,19 @@ namespace Komodo_Console {
 
                         Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                         x = Console.ReadLine();
-                        GetDeveloperByIndex(x);
-                        if (GetDeveloperByIndex(x) != null)
+                         Developer ex = GetDeveloperByIndex(x);
+                        if (ex != null) {
                             foreach (Developer dev in newList) {
-                                if (dev.Name == GetDeveloperByIndex(x).Name) {
+                                if (dev.Name == ex.Name) {
                                     Console.WriteLine("That developer was already added and could not be added again");
                                     goto GetOutOfLoop;
 
                                 }
 
                             }
-                        newList.Add(GetDeveloperByIndex(x));
+                       
+                        newList.Add(ex);
+                        }
 
                         while (GetDeveloperByIndex(x) == null) {
                             Console.WriteLine("Invalid input.  Press a key to try again!\n");
@@ -401,8 +403,9 @@ namespace Komodo_Console {
                             ViewDevelopers();
                             Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                             x = Console.ReadLine();
-                            if (GetDeveloperByIndex(x) != null)
-                                newList.Add(GetDeveloperByIndex(x));
+                            ex = GetDeveloperByIndex(x);
+                            if (ex != null)
+                                newList.Add(ex);
 
                         }
                     GetOutOfLoop: Console.WriteLine(""); //label to break out of loop if user trys to add the same dev
@@ -512,10 +515,8 @@ namespace Komodo_Console {
                     string tempString2 = (Console.ReadLine());
                     int.TryParse(tempString2, out int k);
                     while (k <= 0 || k > _developerRepo.GetList().Count) {
-                        Console.WriteLine("Invalid entry. You must enter and integer no greater than the number of available developers in the list.  Please try again.");
-                        Console.ReadKey();
-                        Console.Clear();
-                        ViewDevelopers();
+                        Console.WriteLine("Invalid entry.  Please try again.");
+                        
                         Console.WriteLine($"How many developers would you like to add to {team.TeamName}?");
                         tempString2 = Console.ReadLine();
                         int.TryParse(tempString2, out k);
@@ -532,11 +533,11 @@ namespace Komodo_Console {
                         Console.WriteLine($"What is the index number of the next developer you would like to add to {team.TeamName}?");
                         x = Console.ReadLine();
                         Developer ex = GetDeveloperByIndex(x);
-                        if ((ex) != null) {
+                        if (ex != null) {
 
                             if (ex.Team == null) {
                                 ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
-                                newList.Add(ex);  //this if statement aviods null exception for the next if...
+                                newList.Add(ex);  //this if statement avoids null exception for the next if...
                             }
                             else
                             if (ex.Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName)
@@ -553,6 +554,7 @@ namespace Komodo_Console {
                                 ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
                             }
                         }
+                        //else continue;
                         while (ex == null) {
                             Console.WriteLine("Invalid input. Try again!\n");
 
@@ -560,11 +562,11 @@ namespace Komodo_Console {
 
                             x = Console.ReadLine();
                             ex = GetDeveloperByIndex(x);
-                            if ((ex) != null) {
+                            if (ex != null) {
 
                                 if (ex.Team == null) {
                                     ex.Team = _devTeamRepo._listOfTeams.ElementAt(j - 1);
-                                    newList.Add(ex);  //this if statement aviods null exception for the next if...
+                                    newList.Add(ex);  //this if statement avoids null exception for the next if...
                                 }
                                 else
                                 if (ex.Team.TeamName == _devTeamRepo._listOfTeams.ElementAt(j - 1).TeamName)
