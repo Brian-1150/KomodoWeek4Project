@@ -87,14 +87,15 @@ namespace Komodo_Repository {
                 return false;
             }
             else {
-                int index = 1;
-                foreach (Developer developer in previousInfo.TeamMembers) {
-                    Console.WriteLine(index + $":  {developer.Name}\n");
-                    index++;
-                }
+               
                 int id;
                 for (int i = 0; i < count; i++) {
-
+                    Console.Clear();
+                    int index = 1;
+                    foreach (Developer developer in previousInfo.TeamMembers) {
+                        Console.WriteLine(index + $":  {developer.Name}\n");
+                        index++;
+                    }
                     Console.WriteLine($"Enter the number of the next developer you wish to remove: ");
                     string idString = Console.ReadLine();
                     int.TryParse(idString, out id);
@@ -147,7 +148,7 @@ namespace Komodo_Repository {
                     $"\tPluralSight Access Status: {developer.TypeOfAccess}\n\n");
 
             }
-            //Here I want add a method that adds and deletes developers from the list on a team and call it from ProgramUI
+            
         }
     }
 }
