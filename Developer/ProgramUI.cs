@@ -339,7 +339,7 @@ namespace Komodo_Console {
             team.TeamName = Console.ReadLine();
             //Get ID
             do {
-            TeamBadge: Console.WriteLine("");
+            TeamBadge:
                 Console.WriteLine($"Enter the numerical Team ID for {team.TeamName}");
                 string s = Console.ReadLine();
 
@@ -639,8 +639,6 @@ namespace Komodo_Console {
             Colts.TeamMembers = test;
         }
 
-
-
         //Helper methods
         public Developer GetDeveloperByIndex(string index) {
             int.TryParse(index, out int k);
@@ -654,33 +652,7 @@ namespace Komodo_Console {
 
         }
 
-        //public void ListExludeFromCurrentTeam(int x) {
-        //    Console.Clear();
-        //    int index = 1;
-        //    List<DevTeam> listOfTeams = _devTeamRepo.GetListOfTeams();
-        //    List<Developer> listOfDevelopers = _developerRepo.GetList();
 
-
-
-        //    foreach (Developer developer in listOfDevelopers) {
-        //        if (developer.Team != listOfTeams.ElementAt(x)) {
-        //            Console.WriteLine("\n" + index + $".      Name:  {developer.Name}\n" +
-        //                $"\tBadge Number: {developer.BadgeNumber}\n" +
-        //                $"\tPluralSight Access Status: {developer.TypeOfAccess}");
-        //            if (developer.Team != null) {
-        //                Console.WriteLine($"\tTeam Affiliation: { developer.Team.TeamName}");
-        //                index++;
-        //            }
-        //            else {
-        //                Console.WriteLine("\tTeam Affiliatin:  None ");
-        //                index++;
-        //            }
-        //        }
-        //    }
-
-
-
-        //}
     }
 
 }

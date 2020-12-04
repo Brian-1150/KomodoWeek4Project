@@ -90,7 +90,7 @@ namespace Komodo_Repository {
                
                 int id;
                 for (int i = 0; i < count; i++) {
-
+                    Console.Clear();
                     int index = 1;
                     foreach (Developer developer in previousInfo.TeamMembers) {
                         Console.WriteLine(index + $":  {developer.Name}\n");
